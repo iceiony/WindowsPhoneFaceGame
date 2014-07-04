@@ -6,10 +6,6 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:local="clr-namespace:FaceGame">
     <!--Application Resources-->
-    <Application.Resources>
-        <local:AppSettings x:Key="AppSettings"/>
-    </Application.Resources>
-    
 
     <Application.ApplicationLifetimeObjects>
         <!--Required object that handles lifetime events for the application-->

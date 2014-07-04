@@ -16,10 +16,11 @@ namespace FaceGame
         /// </summary>
         /// <returns>The root frame of the Phone Application.</returns>
         public static PhoneApplicationFrame RootFrame { get; private set; }
-
+        
+        private readonly AppSettings _appSettings = new AppSettings();
         public AppSettings AppSettings
         {
-            get { return Resources["AppSettings"] as AppSettings; }
+            get { return _appSettings; }
         }
 
         /// <summary>

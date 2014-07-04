@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using FaceGame.ApiResponse;
+using FaceGame.ApiInteraction;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Newtonsoft.Json;
@@ -17,38 +17,33 @@ namespace FaceGame
 {
     public partial class MainPage : PhoneApplicationPage
     {
-        private readonly WebClient _webClient = new WebClient();
+        private ApiClient _apiClient;
         // Constructor
         public MainPage()
         {
             InitializeComponent();
-            _webClient.Headers["Accept"] = "application/json";
+
+            var currentApp = (App) Application.Current;
+            _apiClient = new ApiClient(currentApp.AppSettings);
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs navEvent)
+        protected async override void OnNavigatedTo(NavigationEventArgs navEvent)
         {
-            var rootUrl = ((App)Application.Current).AppSettings.RootApiUrl;
+            var quizQuestion = await _apiClient.GetQuizOptionAync();
 
-            _webClient.DownloadStringAsync(new Uri(rootUrl));
-
-            _webClient.DownloadStringCompleted += (sender, download) =>
+            main_image.Source = new BitmapImage(new Uri(quizQuestion.ImageSrc));
+            foreach (var link in quizQuestion.Links)
             {
-                var quizQuestion = JsonConvert.DeserializeObject<QuizQeustion>(download.Result);
-                main_image.Source = new BitmapImage(new Uri(rootUrl + quizQuestion.ImageSrc));
+                ButtonList.Children.Add(
+                    new Button()
+                    {
+                        Tag = link.Href,
+                        Content = link.Text
+                    });
+            }
 
-                foreach (var link in quizQuestion.Links)
-                {
-                    ButtonList.Children.Add(
-                        new Button(){
-                            Tag = new Uri(rootUrl + link.Href),
-                            Content = link.Text
-                        });
-                }
-
-
-                LayoutRoot.Visibility = Visibility.Visible;
-                SystemTray.ProgressIndicator.IsVisible = false;
-            };
+            LayoutRoot.Visibility = Visibility.Visible;
+            SystemTray.ProgressIndicator.IsVisible = false;
 
         }
     }
