@@ -11,23 +11,18 @@ namespace FaceGame
 {
     public partial class App : Application
     {
-        /// <summary>
-        /// Provides easy access to the root frame of the Phone Application.
-        /// </summary>
-        /// <returns>The root frame of the Phone Application.</returns>
         public static PhoneApplicationFrame RootFrame { get; private set; }
-        
-        private readonly AppSettings _appSettings = new AppSettings();
-        public AppSettings AppSettings
-        {
-            get { return _appSettings; }
-        }
+        public AppSettings AppSettings { get; private set; }
+        public MainViewModel MainViewModel { get; private set; }
 
         /// <summary>
         /// Constructor for the Application object.
         /// </summary>
         public App()
         {
+            AppSettings = new AppSettings();
+            MainViewModel = new MainViewModel(AppSettings);
+
             // Global handler for uncaught exceptions.
             UnhandledException += Application_UnhandledException;
 
@@ -38,7 +33,6 @@ namespace FaceGame
             InitializePhoneApplication();
 
             // Language display initialization
-            InitializeLanguage();
 
             // Show graphics profiling information while debugging.
             if (Debugger.IsAttached)
@@ -169,26 +163,5 @@ namespace FaceGame
 
         #endregion
 
-        // Initialize the app's font and flow direction as defined in its localized resource strings.
-        //
-        // To ensure that the font of your application is aligned with its supported languages and that the
-        // FlowDirection for each of those languages follows its traditional direction, ResourceLanguage
-        // and ResourceFlowDirection should be initialized in each resx file to match these values with that
-        // file's culture. For example:
-        //
-        // AppResources.es-ES.resx
-        //    ResourceLanguage's value should be "es-ES"
-        //    ResourceFlowDirection's value should be "LeftToRight"
-        //
-        // AppResources.ar-SA.resx
-        //     ResourceLanguage's value should be "ar-SA"
-        //     ResourceFlowDirection's value should be "RightToLeft"
-        //
-        // For more info on localizing Windows Phone apps see http://go.microsoft.com/fwlink/?LinkId=262072.
-        //
-        private void InitializeLanguage()
-        {
-          
-        }
     }
 }
