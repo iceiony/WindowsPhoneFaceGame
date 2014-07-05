@@ -19,6 +19,10 @@
             <Setter Property="Padding" Value="8"/>
             <Setter Property="Width" Value="377"/>
         </Style>
+        <Style TargetType="TextBlock" x:Key="Score">
+            <Setter Property="Foreground" Value="Chartreuse"/>
+        </Style>
+
     </phone:PhoneApplicationPage.Resources>
 
     <shell:SystemTray.ProgressIndicator>
@@ -32,14 +36,18 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" HorizontalAlignment="Left" Margin="8" Text="Face Game" VerticalAlignment="Top"/>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" >
+            <TextBlock  Margin="8" Text="Face Game" />
+            <TextBlock  Margin="8" Text="{Binding Score}" Style="{StaticResource Score}"  />
+        </StackPanel>
+
         <Image Grid.Row="1" Height="404" Margin="8" RenderTransformOrigin="0.5,0.5" Source="{Binding CurrentImage, Mode=OneWay}"  />
 
         <StackPanel Grid.Row="2" x:Name="ButtonList">
             <ItemsControl ItemsSource="{Binding Buttons, Mode = OneWay}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Content="{Binding Path=Text}" Tag ="{Binding Tag}"/>
+                        <Button Content="{Binding Path=Text}" Tag ="{Binding Tag}" Click="Button_OnClick"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

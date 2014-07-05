@@ -34,5 +34,12 @@ namespace FaceGame
             if (!_mainViewModel.IsQuestionLoaded) 
                 _mainViewModel.LoadNextQuestion();
         }
+
+        private async void Button_OnClick(object sender, RoutedEventArgs e)
+        {
+            var buttonTag = ((Button) sender).Tag.ToString();
+            await _mainViewModel.Select(buttonTag);
+            _mainViewModel.LoadNextQuestion();
+        }
     }
 }

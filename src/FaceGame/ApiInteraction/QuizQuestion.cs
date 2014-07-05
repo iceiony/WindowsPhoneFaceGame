@@ -2,7 +2,7 @@
 
 namespace FaceGame.ApiInteraction
 {
-    public class QuizQeustion
+    public class QuizQuestion
     {
         public List<QuizOption> Links { get; set; }
         public string ImageSrc { get; set; }

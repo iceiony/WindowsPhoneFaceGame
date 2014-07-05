@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using FaceGame.Annotations;
 using FaceGame.ApiInteraction;
@@ -11,7 +12,7 @@ namespace FaceGame
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private readonly ApiClient _apiClient;
+        private readonly IApiClient _apiClient;
         public bool IsQuestionLoaded { get; set; }
 
         private bool _isLoading;
@@ -35,14 +36,14 @@ namespace FaceGame
             set { _currentImage = value; NotifyPropertyChanged(); }
         }
 
-        public ObservableCollection<ButtonModel> Buttons { get; private set; }
+        public ObservableCollection<ButtonViewModel> Buttons { get; private set; }
        
 
         public MainViewModel(AppSettings settings)
         {
             _apiClient = new ApiClient(settings);
 
-            Buttons = new ObservableCollection<ButtonModel>();
+            Buttons = new ObservableCollection<ButtonViewModel>();
             IsQuestionLoaded = false;
             Score = 0;
         }
@@ -57,7 +58,7 @@ namespace FaceGame
             Buttons.Clear();
             foreach (var option in quizQuestion.Links)
             {
-                Buttons.Add(new ButtonModel()
+                Buttons.Add(new ButtonViewModel()
                 {
                     Text = option.Text,
                     Tag = option.Href
@@ -66,6 +67,13 @@ namespace FaceGame
 
             IsLoading = false;
             IsQuestionLoaded = true;
+        }
+
+        public async Task<bool> Select(string tag)
+        {
+            var vote = await _apiClient.Vote(tag);
+            Score = vote.Score;
+            return true;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -78,7 +86,7 @@ namespace FaceGame
         }
     }
 
-    public class ButtonModel
+    public class ButtonViewModel
     {
         public string Text { get; set; }
         public string Tag { get; set; }

@@ -4,6 +4,7 @@ namespace FaceGame.ApiInteraction
 {
     public interface IApiClient
     {
-        Task<QuizQeustion> GetQuizOptionAync();
+        Task<QuizQuestion> GetQuizOptionAync();
+        Task<Vote> Vote(string votePath);
     }
 }
