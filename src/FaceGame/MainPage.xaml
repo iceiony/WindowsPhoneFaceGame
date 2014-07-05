@@ -5,6 +5,7 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:FaceGame.Converters"
     x:Class="FaceGame.MainPage"
     mc:Ignorable="d"
     SupportedOrientations="Portrait" Orientation="Portrait"
@@ -12,6 +13,8 @@
     >
 
     <phone:PhoneApplicationPage.Resources>
+        <local:ScoreToColour x:Key="ScoreToColour"/>
+        
         <Style TargetType="Button">
             <Setter Property="Background" Value="#00B7FF"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -19,11 +22,6 @@
             <Setter Property="Padding" Value="8"/>
             <Setter Property="Width" Value="377"/>
         </Style>
-        <Style TargetType="TextBlock" x:Key="Score">
-            <Setter Property="FontWeight" Value="Bold"></Setter>
-            <Setter Property="Foreground" Value="#1DD300"/>
-        </Style>
-
     </phone:PhoneApplicationPage.Resources>
 
     <shell:SystemTray.ProgressIndicator>
@@ -39,7 +37,9 @@
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" >
             <TextBlock  Margin="8" Text="Face Game" />
-            <TextBlock  Margin="8" Text="{Binding Score}" Style="{StaticResource Score}"  />
+            <TextBlock  Margin="8" Text="{Binding Score}" 
+                        FontWeight="Bold"
+                        Foreground="{Binding Score , Converter={StaticResource ScoreToColour}}"  />
         </StackPanel>
 
         <Grid Grid.Row="1">
