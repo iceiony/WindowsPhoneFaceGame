@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net.Http;
 using System.Resources;
+using System.ServiceModel.Channels;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Navigation;
+using FaceGame.ModelViewModel;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 
@@ -93,6 +96,11 @@ namespace FaceGame
         // Code to execute on Unhandled Exceptions
         private void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
         {
+            if (e.ExceptionObject is HttpRequestException)
+            {
+                MessageBox.Show("Unable to connect to server");
+            }
+
             if (Debugger.IsAttached)
             {
                 // An unhandled exception has occurred; break into the debugger

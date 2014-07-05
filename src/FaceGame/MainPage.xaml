@@ -20,13 +20,14 @@
             <Setter Property="Width" Value="377"/>
         </Style>
         <Style TargetType="TextBlock" x:Key="Score">
-            <Setter Property="Foreground" Value="Chartreuse"/>
+            <Setter Property="FontWeight" Value="Bold"></Setter>
+            <Setter Property="Foreground" Value="#1DD300"/>
         </Style>
 
     </phone:PhoneApplicationPage.Resources>
 
     <shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator IsIndeterminate="True" Text="Loading..." IsVisible="{Binding IsLoading, Mode=OneWay}" />
+        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="{Binding IsLoading, Mode=OneWay}" />
     </shell:SystemTray.ProgressIndicator>
 
     <Grid x:Name="LayoutRoot" Background="Transparent" Visibility="Visible">
@@ -41,7 +42,10 @@
             <TextBlock  Margin="8" Text="{Binding Score}" Style="{StaticResource Score}"  />
         </StackPanel>
 
-        <Image Grid.Row="1" Height="404" Margin="8" RenderTransformOrigin="0.5,0.5" Source="{Binding CurrentImage, Mode=OneWay}"  />
+        <Grid Grid.Row="1">
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding LoadProgress,Mode=OneWay}"/> 
+            <Image Height="404" Margin="8" RenderTransformOrigin="0.5,0.5" Source="{Binding CurrentImage, Mode=OneWay}" />
+        </Grid>
 
         <StackPanel Grid.Row="2" x:Name="ButtonList">
             <ItemsControl ItemsSource="{Binding Buttons, Mode = OneWay}">
@@ -52,7 +56,6 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </StackPanel>
-
     </Grid>
 
 </phone:PhoneApplicationPage>

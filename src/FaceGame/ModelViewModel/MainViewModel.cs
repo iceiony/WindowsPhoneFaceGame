@@ -1,14 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Imaging;
 using FaceGame.Annotations;
 using FaceGame.ApiInteraction;
 
-namespace FaceGame
+namespace FaceGame.ModelViewModel
 {
     public class MainViewModel : INotifyPropertyChanged
     {
@@ -20,6 +22,13 @@ namespace FaceGame
         {
             get { return _isLoading; }
             set { _isLoading = value; NotifyPropertyChanged(); }
+        }
+
+        private string _loadProgress;
+        public string LoadProgress
+        {
+            get { return _loadProgress; }
+            set { _loadProgress = value; NotifyPropertyChanged(); }
         }
 
         private int _score;
@@ -51,22 +60,33 @@ namespace FaceGame
         public async void LoadNextQuestion()
         {
             IsLoading = true;
+            Buttons.Clear();
 
             var quizQuestion = await _apiClient.GetQuizOptionAync();
             CurrentImage = new BitmapImage(new Uri(quizQuestion.ImageSrc));
 
-            Buttons.Clear();
-            foreach (var option in quizQuestion.Links)
+            CurrentImage.ImageFailed += (s, e) => ThrowNetworkException();
+            CurrentImage.DownloadProgress += (s, p) => LoadProgress = p.Progress + "%";
+            
+            CurrentImage.ImageOpened += (s, e) =>
             {
-                Buttons.Add(new ButtonViewModel()
+                foreach (var option in quizQuestion.Links)
                 {
-                    Text = option.Text,
-                    Tag = option.Href
-                });
-            }
+                    Buttons.Add(new ButtonViewModel()
+                    {
+                        Text = option.Text,
+                        Tag = option.Href
+                    });
+                }
 
-            IsLoading = false;
-            IsQuestionLoaded = true;
+                IsLoading = false;
+                IsQuestionLoaded = true;
+            };
+        }
+
+        public void ThrowNetworkException()
+        {
+            throw new HttpRequestException("Failed to fetch image"); 
         }
 
         public async Task<bool> Select(string tag)
@@ -84,11 +104,5 @@ namespace FaceGame
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
-    }
-
-    public class ButtonViewModel
-    {
-        public string Text { get; set; }
-        public string Tag { get; set; }
     }
 }

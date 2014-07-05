@@ -4,12 +4,14 @@ using System.Data.Linq;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using Windows.ApplicationModel.Store;
 using FaceGame.ApiInteraction;
+using FaceGame.ModelViewModel;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Newtonsoft.Json;
@@ -31,8 +33,8 @@ namespace FaceGame
 
         protected override void OnNavigatedTo(NavigationEventArgs navEvent)
         {
-            if (!_mainViewModel.IsQuestionLoaded) 
-                _mainViewModel.LoadNextQuestion();
+                if (!_mainViewModel.IsQuestionLoaded)
+                    _mainViewModel.LoadNextQuestion();
         }
 
         private async void Button_OnClick(object sender, RoutedEventArgs e)
