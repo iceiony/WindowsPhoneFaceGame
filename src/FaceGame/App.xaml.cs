@@ -6,6 +6,7 @@ using System.ServiceModel.Channels;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Navigation;
+using FaceGame.ApiInteraction;
 using FaceGame.ModelViewModel;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
@@ -16,7 +17,7 @@ namespace FaceGame
     {
         public static PhoneApplicationFrame RootFrame { get; private set; }
         public AppSettings AppSettings { get; private set; }
-        public MainViewModel MainViewModel { get; private set; }
+        public IApiClient ApiClient { get; private set; }
 
         /// <summary>
         /// Constructor for the Application object.
@@ -24,7 +25,7 @@ namespace FaceGame
         public App()
         {
             AppSettings = new AppSettings();
-            MainViewModel = new MainViewModel(AppSettings);
+            ApiClient = new ApiClient(AppSettings);
 
             // Global handler for uncaught exceptions.
             UnhandledException += Application_UnhandledException;

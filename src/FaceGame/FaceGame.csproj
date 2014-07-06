@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="ApiInteraction\ApiClient.cs" />
     <Compile Include="ApiInteraction\IApiClient.cs" />
+    <Compile Include="ApiInteraction\LoginInformation.cs" />
     <Compile Include="ApiInteraction\QuizOption.cs" />
     <Compile Include="ApiInteraction\QuizQuestion.cs" />
     <Compile Include="ApiInteraction\Vote.cs" />
@@ -130,6 +131,9 @@
     <Content Include="Assets\ApplicationIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\favs.png" />
+    <Content Include="Assets\save.png" />
+    <Content Include="Assets\sync.png" />
     <Content Include="Assets\Tiles\FlipCycleTileLarge.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -145,8 +149,12 @@
     <Content Include="Assets\Tiles\IconicTileSmall.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="README_FIRST.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Phone.Controls.Toolkit">
+      <HintPath>..\packages\WPtoolkit.4.2013.08.16\lib\wp8\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\wp8\Microsoft.Threading.Tasks.dll</HintPath>
     </Reference>

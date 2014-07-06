@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using Windows.Foundation.Metadata;
 using FaceGame.Annotations;
 using FaceGame.ApiInteraction;
 
@@ -12,7 +13,9 @@ namespace FaceGame.ModelViewModel
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private readonly IApiClient _apiClient;
+        private IApiClient _apiClient;
+        private AppSettings _appSettings;
+
         public bool IsQuestionLoaded { get; set; }
 
         private bool _isLoading;
@@ -55,6 +58,7 @@ namespace FaceGame.ModelViewModel
 
         public MainViewModel(AppSettings settings)
         {
+            _appSettings = settings;
             _apiClient = new ApiClient(settings);
 
             Buttons = new ObservableCollection<ButtonViewModel>();
@@ -64,6 +68,7 @@ namespace FaceGame.ModelViewModel
 
         public async Task<QuizQuestion> LoadNextQuestion()
         {
+            Buttons.Clear();
             IsLoading = true;
 
             var quizQuestion = await _apiClient.GetQuizOptionAync();
@@ -100,10 +105,37 @@ namespace FaceGame.ModelViewModel
             Buttons.Clear();
 
             var response = await _apiClient.Vote(tag);
-            Score = response.Score.ToString();
-            VoteScore = response.VoteScore > 0 ? "+" + response.VoteScore : response.VoteScore.ToString();
+            UpdateScores(response.Score, response.VoteScore);
 
             return response;
+        }
+
+        public void UpdateScores(int score,int voteScore)
+        {
+            Score = score.ToString();
+            VoteScore = voteScore > 0 ? "+" + voteScore : voteScore.ToString();
+        }
+
+        public async Task<LoginResult> Authenticate(LoginInformation loginInformation, LogInType type)
+        {
+            IsLoading = true;
+
+            LoginResult result;
+            if (type == LogInType.LogIn)
+                result = await _apiClient.LogIn(loginInformation);
+            else
+                result = await _apiClient.Register(loginInformation);
+
+            if (result.IsSuccess)
+            {
+                _appSettings.LoginEmail = loginInformation.Email;
+                _appSettings.LoginPassword = loginInformation.Password;
+                UpdateScores(result.Score + result.VoteScore, result.VoteScore);
+                LoadNextQuestion();
+            }
+
+            IsLoading = false;
+            return result;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -114,5 +146,11 @@ namespace FaceGame.ModelViewModel
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
+    }
+
+    public enum LogInType
+    {
+        Reister,
+        LogIn
     }
 }
