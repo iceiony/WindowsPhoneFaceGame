@@ -37,7 +37,7 @@ namespace FaceGame
             DataContext = _mainViewModel;
         }
 
-        protected async override void OnNavigatedTo(NavigationEventArgs navEvent)
+        protected override void OnNavigatedTo(NavigationEventArgs navEvent)
         {
             if (!_mainViewModel.IsQuestionLoaded)
             {
@@ -66,7 +66,15 @@ namespace FaceGame
             _mainViewModel.LoadNextQuestion();
         }
 
-        private void Login_OnClick(object sender, EventArgs e)
+        private void StarButton_OnClick(object sender, EventArgs e)
+        {
+            if (!_appSettings.HasLoginInformation)
+                Login();
+            else 
+                NavigationService.Navigate(new Uri("/Leaderboard.xaml",UriKind.Relative));
+        }
+
+        private void Login()
         {
             var customMessageBox = new CustomMessageBox()
             {

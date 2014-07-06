@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
@@ -58,6 +59,13 @@ namespace FaceGame.ApiInteraction
             return PostLoginInformation(loginInformation, "/login");
         }
 
+        public async Task<IList<UserScore>> GetLeaderboardList()
+        {
+            var response = await _webClient.GetStringAsync(new Uri(_rootUrl, "/leaderboard"));
+            var users = JsonConvert.DeserializeObject<IList<UserScore>>(response);
+            return users;
+        }
+
         public async Task<LoginResult> PostLoginInformation(LoginInformation loginInformation,string path)
         {
             var postContent = new FormUrlEncodedContent(new List<KeyValuePair<string,string>>()
@@ -75,15 +83,5 @@ namespace FaceGame.ApiInteraction
 
             return loginResult;
         }
-    }
-
-    public class LoginResult
-    {
-        public bool IsSuccess { get; set; }
-        public string Message { get; set; }
-        public string Error { get; set; }
-        public string QuizLink { get; set; }
-        public int Score { get; set; }
-        public int VoteScore { get; set; }
     }
 }

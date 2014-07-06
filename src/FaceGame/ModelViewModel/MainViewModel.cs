@@ -147,10 +147,4 @@ namespace FaceGame.ModelViewModel
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-
-    public enum LogInType
-    {
-        Reister,
-        LogIn
-    }
 }

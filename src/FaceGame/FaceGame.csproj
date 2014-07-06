@@ -93,18 +93,25 @@
     <Compile Include="ApiInteraction\ApiClient.cs" />
     <Compile Include="ApiInteraction\IApiClient.cs" />
     <Compile Include="ApiInteraction\LoginInformation.cs" />
+    <Compile Include="ApiInteraction\LoginResult.cs" />
     <Compile Include="ApiInteraction\QuizOption.cs" />
     <Compile Include="ApiInteraction\QuizQuestion.cs" />
+    <Compile Include="ApiInteraction\UserScore.cs" />
     <Compile Include="ApiInteraction\Vote.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="AppSettings.cs" />
     <Compile Include="Converters\ScoreToColour.cs" />
+    <Compile Include="Leaderboard.xaml.cs">
+      <DependentUpon>Leaderboard.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ModelViewModel\ButtonViewModel.cs" />
+    <Compile Include="ModelViewModel\LeaderBoardViewModel.cs" />
+    <Compile Include="ModelViewModel\LogInType.cs" />
     <Compile Include="ModelViewModel\MainViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -114,6 +121,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Page Include="Leaderboard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
