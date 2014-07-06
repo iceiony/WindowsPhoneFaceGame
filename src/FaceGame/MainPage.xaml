@@ -14,7 +14,19 @@
 
     <phone:PhoneApplicationPage.Resources>
         <local:ScoreToColour x:Key="ScoreToColour"/>
-        
+
+        <Storyboard x:Name="AnimateScoreChange">
+            <DoubleAnimation Storyboard.TargetName="AnimateFlipProjection"
+                             Storyboard.TargetProperty="RotationX"
+                             From="-80" To="0" Duration="0:0:0.5"/>
+        </Storyboard>
+        <Storyboard x:Name="AnimateScoreVoteChange">
+            <DoubleAnimation Storyboard.TargetName="VoteScore"
+                             Storyboard.TargetProperty="Opacity"
+                             From="1" To="0" Duration="0:0:0.8"/>
+        </Storyboard>
+
+
         <Style TargetType="Button">
             <Setter Property="Background" Value="#00B7FF"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -37,13 +49,24 @@
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" >
             <TextBlock  Margin="8" Text="Face Game" />
-            <TextBlock  Margin="8" Text="{Binding Score}" 
+            <TextBlock  Margin="5,8,3,8"
                         FontWeight="Bold"
-                        Foreground="{Binding Score , Converter={StaticResource ScoreToColour}}"  />
+                        Text="{Binding Score}" 
+                        Foreground="{Binding Score , Converter={StaticResource ScoreToColour}}" >
+                <TextBlock.Projection>
+                    <PlaneProjection x:Name="AnimateFlipProjection"/>
+                </TextBlock.Projection>
+            </TextBlock>
+            <TextBlock Margin="0,8" 
+                       x:Name="VoteScore"
+                       Opacity="0" 
+                       FontWeight="Bold"
+                       Text="{Binding VoteScore}"
+                       Foreground="{Binding VoteScore , Converter={StaticResource ScoreToColour}}" />
         </StackPanel>
 
         <Grid Grid.Row="1">
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding LoadProgress,Mode=OneWay}"/> 
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding LoadProgress,Mode=OneWay}"/>
             <Image Height="404" Margin="8" RenderTransformOrigin="0.5,0.5" Source="{Binding CurrentImage, Mode=OneWay}" />
         </Grid>
 

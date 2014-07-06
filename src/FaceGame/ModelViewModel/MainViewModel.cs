@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Media.Imaging;
 using FaceGame.Annotations;
 using FaceGame.ApiInteraction;
@@ -31,11 +29,18 @@ namespace FaceGame.ModelViewModel
             set { _loadProgress = value; NotifyPropertyChanged(); }
         }
 
-        private int _score;
-        public int Score
+        private string _score;
+        public string Score
         {
             get { return _score; }
             set { _score = value; NotifyPropertyChanged(); }
+        } 
+        
+        private string _voteScore;
+        public string VoteScore
+        {
+            get { return _voteScore; }
+            set { _voteScore = value; NotifyPropertyChanged(); }
         }
 
         private BitmapImage _currentImage;
@@ -54,7 +59,7 @@ namespace FaceGame.ModelViewModel
 
             Buttons = new ObservableCollection<ButtonViewModel>();
             IsQuestionLoaded = false;
-            Score = 0;
+            Score = "0";
         }
 
         public async Task<QuizQuestion> LoadNextQuestion()
@@ -94,10 +99,11 @@ namespace FaceGame.ModelViewModel
         {
             Buttons.Clear();
 
-            var vote = await _apiClient.Vote(tag);
-            Score = vote.Score;
+            var response = await _apiClient.Vote(tag);
+            Score = response.Score.ToString();
+            VoteScore = response.VoteScore > 0 ? "+" + response.VoteScore : response.VoteScore.ToString();
 
-            return vote;
+            return response;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

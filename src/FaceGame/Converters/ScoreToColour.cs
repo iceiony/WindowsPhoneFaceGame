@@ -8,8 +8,11 @@ namespace FaceGame.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var score = (int)value;
-            if (score >= 0)
+            var score = value as string;
+            if (score == null)
+                return "white";
+            
+            if (score[0] != '-')
                 return "#1DD300";
             else
                 return "#FF5300";
