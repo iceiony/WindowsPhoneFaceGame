@@ -57,10 +57,9 @@ namespace FaceGame.ModelViewModel
             Score = 0;
         }
 
-        public async void LoadNextQuestion()
+        public async Task<QuizQuestion> LoadNextQuestion()
         {
             IsLoading = true;
-            Buttons.Clear();
 
             var quizQuestion = await _apiClient.GetQuizOptionAync();
             CurrentImage = new BitmapImage(new Uri(quizQuestion.ImageSrc));
@@ -82,6 +81,8 @@ namespace FaceGame.ModelViewModel
                 IsLoading = false;
                 IsQuestionLoaded = true;
             };
+
+            return quizQuestion;
         }
 
         public void ThrowNetworkException()
@@ -89,11 +90,14 @@ namespace FaceGame.ModelViewModel
             throw new HttpRequestException("Failed to fetch image"); 
         }
 
-        public async Task<bool> Select(string tag)
+        public async Task<Vote> Select(string tag)
         {
+            Buttons.Clear();
+
             var vote = await _apiClient.Vote(tag);
             Score = vote.Score;
-            return true;
+
+            return vote;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
